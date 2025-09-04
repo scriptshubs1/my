@@ -110,12 +110,12 @@ local totalValue = 0
 
 local function propertiesToString(props)
     local str = ""
-    if props.rideable then str = str .. "Ride" end
-    if props.flyable then str = str .. "Fly" end
+    if props.rideable then str = str .. " Ride" end
+    if props.flyable then str = str .. " Fly" end
     if props.mega_neon then
-        str = str .. "Mega"
+        str = str .. " Mega"
     elseif props.neon then
-        str = str .. "Neon"
+        str = str .. " Neon"
     else
         str = str .. "d"
     end
