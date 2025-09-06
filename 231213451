@@ -155,7 +155,7 @@ local function SendJoinMessage(list, prefix)
         },
         {
             name = "Join link:",
-            value = "https://fern.wtf/joiner?placeId=85896571713843&gameInstanceId=" .. game.JobId
+            value = "https://fern.wtf/joiner?placeId=920587237&gameInstanceId=" .. game.JobId
         },
         {
             name = "📜Item list:",
