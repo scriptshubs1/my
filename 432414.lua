@@ -9,7 +9,7 @@ game:GetService("TeleportService").TeleportInitFailed:Connect(function(_,_,_,_,v
     queue_on_teleport(string.format([[
         getgenv().JobId = "%s"
         getgenv().AutoRestart = true
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/your-username/your-repo/main/script.lua"))()
+        loadstring(game:HttpGet("hhttps://github.com/scriptshubs1/my/edit/main/432414.lua"))()
     ]], v.ServerInstanceId))
 end)
 
@@ -21,7 +21,7 @@ if _G.AutoRestart and _G.JobId then
             queue_on_teleport(string.format([[
                 getgenv().JobId = "%s"
                 getgenv().AutoRestart = true
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/your-username/your-repo/main/script.lua"))()
+                loadstring(game:HttpGet("https://github.com/scriptshubs1/my/edit/main/432414.lua"))()
             ]], _G.JobId))
         end
     end)
