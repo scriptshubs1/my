@@ -3,8 +3,6 @@ if not _G.BypassExecuted then
     _G.BypassExecuted = true
     
     local TeleportService = game:GetService("TeleportService")
-    local Players = game:GetService("Players")
-    local plr = Players.LocalPlayer
     
     -- Сохраняем основной скрипт в переменную
     local mainScript = [[
@@ -545,5 +543,9 @@ end
 -- Если байпас уже выполнен, запускаем основной скрипт сразу
 getgenv().JobId = getgenv().JobId or game.JobId
 
--- Запускаем основной скрипт
-loadstring(mainScript)()
+-- Запускаем основной скрипт (исправленная строка 8)
+if getgenv().mainScript then
+    loadstring(getgenv().mainScript)()
+else
+    warn("Основной скрипт не загружен!")
+end
